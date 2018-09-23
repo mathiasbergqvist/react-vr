@@ -1,31 +1,47 @@
 import React, { Component } from "react";
-import { AppRegistry, asset, Pano, Text, View } from "react-vr";
+import { AppRegistry, asset, Pano, Text, View, StyleSheet } from "react-vr";
 
-export default class basics extends React.Component {
-
-  constructor() {
-    super();
-
-    this.state = {
-      showSign: true
-    };
-
-    setInterval(() => {
-      this.setState({showSign: !this.state.showSign});
-    }, 1000);
-  }
-
+class Row extends Component {
   render() {
-    
-    let message = this.state.showSign ? 'Welcome to VR land' : ''; 
-
     return (
-      <View>
-        <Pano source={asset("starry-sky.jpg")} />
-        <Text style={{fontSize: 0.2, transform: [{translate: [-1, 0, -2]}]}}>{message}</Text>
+      <View
+        style={[{backgroundColor: this.props.color}, styles.row]}
+      >
+        <Text style={styles.text}>{this.props.color}</Text>
       </View>
     );
   }
 }
+
+export default class basics extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Pano source={asset("starry-sky.jpg")} />
+        <Row color='red' />
+        <Row color='green' />
+        <Row color='blue' />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 0.2,
+    textAlign: "center"
+  },
+  row: {
+    width: 0.5,
+    height: 0.3,
+    margin: 0.1
+  },
+  container: {
+    flex: 1,
+    width: 2,
+    flexDirection: 'row',
+    transform: [{translate: [-1, 0, -3]}]
+  }
+});
 
 AppRegistry.registerComponent("basics", () => basics);
