@@ -1,25 +1,38 @@
-import React, {Component} from 'react';
-import {
-  AppRegistry,
-  asset,
-  Pano,
-  Text,
-  View,
-  StyleSheet
-} from 'react-vr';
+import React, { Component } from "react";
+import { AppRegistry, asset, Pano, Text, View, StyleSheet } from "react-vr";
+
+const places = [
+  {
+    title: "Island Garden",
+    image: "island-garden.jpg"
+  },
+  {
+    title: "Light Show",
+    image: "light-show.jpg"
+  },
+  {
+    title: "Starry Sky",
+    image: "starry-sky.jpg"
+  },
+  {
+    title: "Winter Outdoor",
+    image: "winter-outdoor.jpg"
+  }
+];
 
 export default class WorldTour extends Component {
-
   constructor() {
     super();
 
     this.state = {
-      showMenu: false
+      showMenu: false,
+      place: "starry-sky.jpg"
     };
   }
 
   toggleMenu() {
     this.setState({
+      ...this.state,
       showMenu: !this.state.showMenu
     });
   }
@@ -27,28 +40,48 @@ export default class WorldTour extends Component {
   render() {
     return (
       <View>
-        <Pano source={asset('starry-sky.jpg')}/>
-        <View 
-        style={styles.menuButton}
-        onEnter={() => this.toggleMenu()}
-        >
+        <Pano source={asset(this.state.place)} />
+        <View style={styles.menuButton} onEnter={() => this.toggleMenu()}>
           <Text style={styles.menuButtonText}>
-            {this.state.showMenu ? 'Close Menu' : 'Open Menu'}
+            {this.state.showMenu ? "Close Menu" : "Open Menu"}
           </Text>
+        </View>
+        <View style={styles.menuWrapper}>
+          {places.map((place, index) => {
+            return (
+              <View
+                style={styles.menuItem}
+                key={index}
+                onEnter={() => {
+                  this.setState({ place: place.image });
+                }}
+              >
+                <Text style={styles.menuItemText}>{place.title}</Text>
+              </View>
+            );
+          })}
         </View>
       </View>
     );
   }
-};
+}
 
 const styles = StyleSheet.create({
+  menuWrapper: {
+    width: 5,
+    height: 1.25,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    transform: [{ translate: [-2, 0, -7.5] }]
+  },
   menuButton: {
-    backgroundColor: '#fff',
-    borderRadius: 0.25, 
+    backgroundColor: "#fff",
+    borderRadius: 0.25,
     width: 0.5,
     height: 0.5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 0.01,
     transform: [
       {
@@ -57,10 +90,24 @@ const styles = StyleSheet.create({
     ]
   },
   menuButtonText: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 0.15,
-    color: '#000'
+    color: "#000"
+  },
+  menuItem: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 1,
+    height: 1,
+    borderRadius: 0.5,
+    borderWidth: 0.02,
+    backgroundColor: "#fff"
+  },
+  menuItemText: {
+    fontSize: 0.2,
+    textAlign: "center",
+    color: "#000"
   }
 });
 
-AppRegistry.registerComponent('WorldTour', () => WorldTour);
+AppRegistry.registerComponent("WorldTour", () => WorldTour);
